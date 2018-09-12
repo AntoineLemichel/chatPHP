@@ -1,5 +1,6 @@
 <?php
 include("db.php");
+$pseudo = $_COOKIE['pseudo'];
  ?>
 <!doctype html>
 <html class="no-js" lang="fr-FR">
@@ -17,6 +18,7 @@ include("db.php");
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/semantic.min.css">
 </head>
 
 <body>
@@ -25,27 +27,43 @@ include("db.php");
   <![endif]-->
 
   <!-- Add your site or application content here -->
-  <form action="chat.php" method="post">
-    <input type="text" name="pseudo" placeholder="Pseudo" required>
-    <textarea name="message" rows="8" cols="80" placeholder="Votre message" required></textarea>
-    <input type="submit" name="envoyer" value="Envoyer">
-  </form>
-  <?php
-  $reponse = $bdd->query('SELECT * FROM chat');
+  <div class="ui container grid">
+    <form action="chat.php" method="post" class="ui form">
+      <div class="field required">
+        <label>Pseudo :</label>
+        <input type="text" name="pseudo" placeholder="Pseudo" required value="<?php echo $pseudo?>">
+      </div>
+      <div class="field required">
+        <label>Message :</label>
+        <textarea name="message" rows="8" cols="40" placeholder="Votre message" required></textarea>
+      </div>
+      <a href="index.php" class="ui button">Rafraichir la page</a>
+      <input type="submit" name="envoyer" value="Envoyer" class="ui olive button">
+    </form>
+    <div class="five wide column">
 
-  while($donnees = $reponse->fetch()){
-    echo $donnees['pseudo'] . " : ";
-    echo $donnees['message'];
-    echo "<br>";
-  }
+    <?php
+    // setcookie("pseudo", $pseudo, time() + 365*24*3600, null, null, false, true);
+    $reponse = $bdd->query("SELECT * FROM chat ORDER BY id DESC LIMIT 10");
 
-$reponse->closeCursor();
-   ?>
+    while($donnees = $reponse->fetch()){
+      echo "<strong>" .$donnees['pseudo'] . " : </strong>";
+      echo $donnees['message'];
+      echo "<br>";
+    }
+
+  $reponse->closeCursor();
+     ?>
+  </div>
+</div>
+
+
   <script src="js/vendor/modernizr-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/semantic.min.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>

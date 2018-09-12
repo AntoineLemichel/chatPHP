@@ -1,10 +1,11 @@
 <?php
 include("db.php");
 if(isset($_POST['pseudo']) AND !empty($_POST['pseudo']) AND isset($_POST['message']) AND !empty($_POST['message'])){
+  setcookie('pseudo', $_POST['pseudo'], time() + 365*24*3600, null, null, false, true);
   $req = $bdd->prepare('INSERT INTO chat(pseudo, message) VALUES(:pseudo, :message)');
 
   $req->execute(array(
-    'pseudo' => $_POST['pseudo'],
+    'pseudo' => htmlspecialchars($_POST['pseudo']),
     'message' => $_POST['message']
   ));
   header('Location: index.php');
