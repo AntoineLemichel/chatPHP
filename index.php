@@ -47,6 +47,7 @@ $pseudo = $_COOKIE['pseudo'];
     $reponse = $bdd->query("SELECT * FROM chat ORDER BY id DESC LIMIT 10");
 
     while($donnees = $reponse->fetch()){
+      echo $donnees['timedate'] . " - ";
       echo "<strong>" .$donnees['pseudo'] . " : </strong>";
       echo $donnees['message'];
       echo "<br>";
